@@ -1,0 +1,126 @@
+
+<html>
+	<head>
+		<title>Return</title>
+		<link rel="icon" href="/static/kks.png" type="image/png">
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+		<link href="https://fonts.googleapis.com/css?family=Josefin+Sans:300,400,700&subset=latin-ext" rel="stylesheet">
+	<style>
+	.hover_drop_down.input-group-btn ul.dropdown-menu{margin-top: 20px;}/*To avoid unwanted close*/
+.hover_drop_down.btn-group ul.dropdown-menu{margin-top:44px;}/*To avoid unwanted close*/
+.hover_drop_down:hover ul.dropdown-menu{
+   display: block;
+}
+	</style>
+	</head>
+	
+	
+	<body>
+		<nav class="navbar navbar-inverse">
+			<div class="container-fluid">
+			<div class="navbar-header">
+				<ul class="nav nav-pills" role="tablist">
+					<li role="presentation"><a href="/home">Home</a></li>
+					<li role="presentation"><a href="/aboutus">About Us</a></li>
+					<li role="presentation"><a href="/books">Books</a></li>
+					<li role="presentation"><a href="/allpost">Posts</a></li>
+					<li role="presentation"><a href="/store">Store</a></li>
+					
+				</ul>
+			</div>
+			
+			{% if user.is_authenticated %}
+			<ul class="nav navbar-pills navbar-right">
+				<li class="btn-group hover_drop_down">
+					<button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown" data-hover="dropdown"><span class="glyphicon glyphicon-user"></span> 
+						Welcome 
+						{% if request.user.first_name %}
+							{{request.user.first_name}}
+						{% else %}
+							{{request.user}}
+						{% endif %}
+						{% if request.user.profile.pic %}
+							<img src="{{request.user.profile.pic.url}}" class="img-circle" width="30px" height="30px"/>
+						{% endif %}
+						<span class="caret"></span></button>
+						<ul class="dropdown-menu">
+							<li><a href="/orders">Your Orders</a></li>
+							<li><a href="/wpost">Write a new post</a></li>
+							<li><a href="/profile">Edit Profile</a></li>
+							{% ifequal request.user.username "sachin" %}
+							<li><a href="/sachin">Add a new book</a></li>
+							{% endifequal %}
+							<li><a href="/mypost/">My Posts</a></li>
+							<li><a href="/logout">Logout</a></li>
+						</ul>
+					</a>
+					
+				</li>
+			</ul>       
+			
+			<ul class="nav navbar-pills navbar-right">
+				<a href="/wpost" class="btn btn-info btn-lg"><span class="glyphicon glyphicon-pencil"></span>
+				</a>
+			</ul>
+			{% else %}
+			<ul class="nav navbar-pills navbar-right">
+				<li><a href="/register"><span class="glyphicon glyphicon-user"></span> Sign Up</a></li>
+			</ul>
+			<ul class="nav navbar-pills navbar-right">
+			
+				<li class="dropdown"><a class="dropdown-toggle" href="#" data-toggle="dropdown"><span class="glyphicon glyphicon-log-in"></span> Login</a>
+				<div class="dropdown-menu" id="dd" style="padding: 15px; padding-bottom: 10px;">
+				<div class="panel panel-success">
+					<div class="panel-heading"><h3>Login to Your Account</h3></div>
+						<div class="panel-body">
+				
+				
+				<form action="{% url 'check' %}" method="post">
+					{% csrf_token %}
+					
+					<label for="username">Username:</label>
+					<input type="text" class='form-control' placeholder="Enter username" name="username"><br>
+					<label for="password">Password:</label>
+					<input type="password" class='form-control' placeholder="Enter password" name="password">
+					<br>
+					
+					<input type="submit" name="login-submit" class="btn btn-success" id="login-submit" tabindex="4" class="form-control btn btn-login" value="Log In">
+				</form>
+							
+							</div>
+							<div class="panel-footer">
+                    Not Registred? <a href="/register">Register here</a></div>
+							</div>
+				</div>
+			</li>
+			
+			</ul>
+			{% endif %}
+			</div>
+		</nav>
+		<div class="container">
+		<div class="messages">
+		{% for message in messages %}
+		{% if message.tags %} 
+		<div class="{{ message.tags }}">{% endif %}<div class="alert alert-warning">{{ message }}</div></div>
+		{% endfor %}
+	</div></div>
+		<div class="container">
+		<form action="" method="post">
+			{% csrf_token %}
+			<label for="order_no">Order No.:</label>
+					<input type="text" class='form-control' value="{{Order}}" name="order_no" readonly><br>
+			<label for="isbn">ISBN No.:</label>
+					<input type="text" class='form-control' value="{{ISBN}}" name="isbn" readonly><br>
+			<label for="rate">Rate:</label>{{forms.rate}}(Rate us 10 is the Highest and 1 is the lowest)<br><br>
+			
+			<label for="comment">Comments</label>{{forms.comment}}<br><br>
+					
+			<input type="submit" class="btn btn-success">
+		</form>
+		</div>
+	</body>
+</html>

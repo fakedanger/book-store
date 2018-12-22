@@ -1,0 +1,128 @@
+<html>
+	<head>
+		<title>My Posts</title>
+		<link rel="icon" href="/static/kks.png" type="image/png">
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+	<style>
+	.img {
+    float: left;
+    margin: 0 20px 20px 0;
+    width: 150px;
+    height: 150px;
+}
+.p {
+	font-family: "Times New Roman", Times, serif;
+    text-align: justify;
+    text-indent: 2em;
+}
+
+		body { padding-bottom: 70px; }
+
+
+.glyphicon {  margin-bottom: 10px;margin-right: 10px;}
+
+small {
+display: block;
+line-height: 1.428571429;
+color: #999;
+}
+		
+
+</style>
+	</head>
+	<body>
+	
+		<nav class="navbar navbar-inverse">
+			<div class="container-fluid">
+			<div class="navbar-header">
+				<ul class="nav nav-pills">
+					<li role="presentation"><a href="/home">Home</a></li>
+					<li role="presentation"><a href="/aboutus">About Us</a></li>
+					<li role="presentation"><a href="/books">Books</a></li>
+					<li role="presentation"><a href="/allpost">Reviews</a></li>
+					<li role="presentation"><a href="/store">Store</a></li>
+					
+				</ul>
+			</div>
+			
+			{% if user.is_authenticated %}
+			<ul class="nav navbar-pills navbar-right">
+				<li class="dropdown">
+					<a href="#" class="dropdown-toggle" data-toggle="dropdown"><span class="glyphicon glyphicon-user"></span> 
+						Welcome 
+						{% if request.user.first_name %}
+							{{request.user.first_name}}
+						{% else %}
+							{{request.user}}
+						{% endif %}
+						{% if request.user.profile.pic %}
+							<img src="{{request.user.profile.pic.url}}" class="img-circle" width="30px" height="30px"/>
+						{% endif %}
+						<span class="caret"></span></button>
+						<ul class="dropdown-menu">
+							<li><a href="/orders">Your Orders</a></li>
+							<li><a href="/wpost">Write a review</a></li>
+							<li><a href="/profile">Edit Profile</a></li>
+							{% ifequal request.user.username "sachin" %}
+							<li><a href="/sachin">Add a new book</a></li>
+							{% endifequal %}
+							<li><a href="/mypost/">My Reviews</a></li>
+							<li><a href="/logout">Logout</a></li>
+						</ul>
+					</a>
+				</li>
+			</ul>       
+			
+			<ul class="nav navbar-pills navbar-right">
+				<a href="/wpost" class="btn btn-info btn-lg"><span class="glyphicon glyphicon-pencil"></span>
+				</a></li>
+			</ul>
+			{% endif %}
+			</div>
+		</nav>
+		<div class="container">
+    <div class="row">
+        <div class="col-xs-12 col-sm-6 col-md-6">
+            <div class="well well-sm">
+                <div class="row">
+                    <div class="col-sm-6 col-md-4">
+                        <img src="{{data.profile.pic.url}}" alt="" class="img-rounded img-responsive" />
+                    </div>
+                    <div class="col-sm-6 col-md-8">
+                        <h4>
+                            {{data.first_name}} {{data.last_name}}</h4>
+                        <small><cite title="{{data.profile.location}}">{{data.profile.location}}<i class="glyphicon glyphicon-map-marker">
+                        </i></cite></small>
+                        <p>
+                            <i class="glyphicon glyphicon-envelope"></i>{{data.email}}
+                            <br />
+                            
+							<i class="glyphicon glyphicon-briefcase"></i>{{data.profile.occupation}}</p>
+                        <!-- Split button -->
+						<a href="/authpost/{{data.first_name}}" class="btn btn-info" role="button">My Posts</a>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+	
+								 
+		<div class="navbar navbar-inverse navbar-fixed-bottom">
+			<div class="container">
+				<p class="navbar-text pull-left">Site Built By VJ & Team(BCA-First Shift)</p>
+				<a href="https://www.facebook.com" role="button">
+				<i class="fa fa-facebook-square" style="font-size:36px;color:#3b5998"></i></a>
+				<i class="fa fa-instagram" style="font-size:36px;color:white"></i>
+				<a href="https://www.bbtpoint.com/contact" class="navbar-btn btn-danger btn pull-right">
+					<span class="	glyphicon glyphicon-phone-alt"></span>  Contact Us
+				</a>
+			</div>
+		</div>
+		
+	</body>
+</html>

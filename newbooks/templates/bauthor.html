@@ -1,0 +1,87 @@
+
+<html>
+	<head>
+		<title>Books</title>
+		<link rel="icon" href="/static/kks.png" type="image/png">
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+		<style>
+		body { padding-bottom: 70px; }
+		</style>
+	</head>
+	<body>
+		<nav class="navbar navbar-inverse">
+			<div class="container-fluid">
+			<div class="navbar-header">
+				<ul class="nav nav-pills">
+					<li role="presentation"><a href="/home">Home</a></li>
+					<li role="presentation"><a href="/aboutus">About Us</a></li>
+					<li role="presentation"><a href="/books">Books</a></li>
+					<li role="presentation"><a href="/allpost">Posts</a></li>
+					<li role="presentation"><a href="/store">Store</a></li>
+					
+				</ul>
+			</div>
+			{% if user.is_authenticated %}
+			<ul class="nav navbar-pills navbar-right">
+				<li class="dropdown">
+					<a href="#" class="dropdown-toggle" data-toggle="dropdown"><span class="glyphicon glyphicon-user"></span> 
+						Welcome 
+						{% if request.user.first_name %}
+							{{request.user.first_name}}
+						{% else %}
+							{{request.user}}
+						{% endif %}
+						{% if request.user.profile.pic %}
+							<img src="{{request.user.profile.pic.url}}" class="img-circle" width="30px" height="30px"/>
+						{% endif %}
+						<span class="caret"></span></button>
+						<ul class="dropdown-menu">
+							<li><a href="/orders">Your Orders</a></li>
+							<li><a href="/wpost">Write a new post</a></li>
+							<li><a href="/profile">Edit Profile</a></li>
+							{% ifequal request.user.username "sachin" %}
+							<li><a href="/sachin">Add a new book</a></li>
+							{% endifequal %}
+							<li><a href="/mypost/">My Posts</a></li>
+							<li><a href="/logout">Logout</a></li>
+						</ul>
+					</a>
+				</li>
+			</ul>       
+			
+			<ul class="nav navbar-pills navbar-right">
+				<a href="/wpost" class="btn btn-info btn-lg"><span class="glyphicon glyphicon-pencil"></span>
+				</a></li>
+			</ul>
+			{% else %}
+				<ul class="nav navbar-pills navbar-right">
+					<li><a href="/login"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
+				</ul>
+			{% endif %}
+			</div>
+		</nav>
+		
+		<div class="container">
+			<h2>Author Details</h2>
+				<div class="panel panel-default">
+					<div class="panel-heading">{{author.name}}</div>
+						<div class="panel-body">
+						<img src="{{author.pic.url}}" height="200px" width="200px"/><br>
+						<h2>{{author.name}}</h2><br>
+						{% if messages %}
+		<div class="messages">
+		{% for message in messages %}
+		{% if message.tags %} 
+		<div class="{{ message.tags }}">{% endif %}<div class="alert alert-warning">{{ message }}</div></div>
+		{% endfor %}
+	</div>
+{% endif %}
+						<h3><font face="Times New Roman" color="blue">{{author.about|linebreaks}}</font></h3>
+						</div>
+				</div>
+		</div>
+	</body>
+</html>

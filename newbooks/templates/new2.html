@@ -1,0 +1,142 @@
+<html>
+	<head>
+		<title>All Posts</title>
+		<link rel="icon" href="/static/kks.png" type="image/png">
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+		<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+		<style>
+		body { padding-bottom: 70px; }
+		.scrollable {
+		height: 200px;
+		overflow-y: auto;
+		}
+		</style>
+	</head>
+	<body>
+		<nav class="navbar navbar-inverse">
+			<div class="container-fluid">
+			<div class="navbar-header">
+				<ul class="nav nav-pills">
+					<li role="presentation"><a href="/home">Home</a></li>
+					<li role="presentation"><a href="/aboutus">About Us</a></li>
+					<li role="presentation"><a href="/books">Books</a></li>
+					
+					<li role="presentation" class="active"><a href="/allpost">Posts</a></li>
+					<li role="presentation"><a href="/store">Store</a></li>
+					
+				</ul>
+			</div>
+			
+			{% if user.is_authenticated %}
+			<ul class="nav navbar-pills navbar-right">
+				<li class="dropdown">
+					<a href="#" class="dropdown-toggle" data-toggle="dropdown"><span class="glyphicon glyphicon-user"></span> 
+						Welcome 
+						{% if request.user.first_name %}
+							{{request.user.first_name}}
+						{% else %}
+							{{request.user}}
+						{% endif %}
+						{% if request.user.profile.pic %}
+							<img src="{{request.user.profile.pic.url}}" class="img-circle" width="30px" height="30px"/>
+						{% endif %}
+						<span class="caret"></span></button>
+						<ul class="dropdown-menu">
+							<li><a href="/orders">Your Orders</a></li>
+							<li><a href="/wpost">Write a new post</a></li>
+							<li><a href="/profile">Edit Profile</a></li>
+							{% ifequal request.user.username "sachin" %}
+							<li><a href="/sachin">Add a new book</a></li>
+							{% endifequal %}
+							<li><a href="/mypost/">My Posts</a></li>
+							<li><a href="/logout">Logout</a></li>
+						</ul>
+					</a>
+				</li>
+			</ul>       
+			
+			<ul class="nav navbar-pills navbar-right">
+				<a href="/wpost" class="btn btn-info btn-lg"><span class="glyphicon glyphicon-pencil"></span>
+				</a></li>
+			</ul>
+			{% endif %}
+			</div>
+		</nav>
+		<form action="" method="post">
+		{% for i in all %}
+		
+		<div class="container">
+			<div class="panel panel-primary">
+				<div class="panel-heading">{{i.title}}<small>&nbsp;&nbsp;{{i.date_created|timesince}}&nbsp;ago</small></div>
+					<div class="panel-body">
+					{% for p in k %}
+						<h3>{% ifequal i.author p.first_name %}<img src="{{p.profile.pic.url}}" class="img-circle" width="50px" height="50px"/><br>{% endifequal %}
+							{% endfor %}<b>
+								<font color="blue"><a href="/authdet/{{i.author}}/"> {{i.author}}</a></font>
+								
+							</b>
+							
+						</h3>
+						<h4>{{i.post|linebreaks}}</h4>
+						<a href="/comm/{{i.title}}/" class="btn btn-info" role="button"> <span class="glyphicon glyphicon-comment"></span>Comment</a>
+						<span class="pull-right">
+							{% ifequal i.author request.user.username %}
+						<a href="/delete/{{i.id}}/"><i class="material-icons" style="font-size:48px;color:red">delete</i></a>
+						{% endifequal %}
+						{% ifequal i.author request.user.first_name %}
+						<a href="/delete/{{i.id}}/"><i class="material-icons" style="font-size:48px;color:red">delete</i></a>
+						{% endifequal %}
+						</span>
+									
+						<h2>Comments</h2>
+						
+						<div class="scrollable">
+							{% for k in jks %}
+							{% ifequal i.title k.bg.title %}
+							
+							
+									
+							<div class="panel panel-success">
+								<div class="panel-heading">
+									{{k.name}}<span class="pull-right">{{k.datecreate}}</span>
+								</div>
+								<div class="panel-body panel-height">{{k.comments}}<span class="pull-right">
+									{% if k.name == request.user.username or i.author == request.user.username %}
+									<a href="/delcomm/{{k.id}}/"><i class="material-icons" style="font-size:48px;color:red">delete</i></a>
+									{% endif %}
+									{% if k.name == request.user.first_name or i.author == request.user.first_name %}
+									<a href="/delcomm/{{k.id}}/"><i class="material-icons" style="font-size:48px;color:red">delete</i></a>
+									{% endif %}<span><br><br>
+									
+								</div>
+								
+						
+						</div>
+							
+							{% endifequal %}
+							{% endfor %}
+							
+						</div>			
+					</div>
+				</div>
+			</div>
+		</div>
+		{% endfor %}
+		
+		</form>
+		<div class="navbar navbar-inverse navbar-fixed-bottom">
+			<div class="container">
+				<p class="navbar-text pull-left">Site Built By Jaikrishna Sharma & Himanshu Kapoor(BCA-First Shift)</p>
+				<a href="https://www.facebook.com/jaikrishna.sharma.77" role="button">
+				<i class="fa fa-facebook-square" style="font-size:36px;color:#3b5998"></i></a>
+				<i class="fa fa-instagram" style="font-size:36px;color:white"></i>
+				<a href="https://www.bbtpoint.com/contact" class="navbar-btn btn-danger btn pull-right">
+					<span class="	glyphicon glyphicon-phone-alt"></span>  Contact Us
+				</a>
+			</div>
+		</div>
+	</body>
+</html>
